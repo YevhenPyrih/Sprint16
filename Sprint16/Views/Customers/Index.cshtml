@@ -1,0 +1,86 @@
+@model IEnumerable<Sprint16.Models.Customer>
+
+@{
+    ViewData["Title"] = "Index";
+
+    var sortedList = Model;
+
+    switch (ViewBag.SortBy)
+    {
+        case 0:
+            sortedList = Model.OrderBy(c => c.Last_name);
+            break;
+        case 1:
+            sortedList = Model.OrderBy(c => c.Address);
+            break;
+    }
+
+    if(!ViewBag.Asc)
+    {
+        sortedList = sortedList.Reverse();
+    }
+
+    if(ViewBag.CurrentFilter != "")
+    {
+        sortedList = sortedList.Where(e => e.ToString().Contains(ViewBag.CurrentFilter));
+    }
+}
+
+<h1>Customers</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+
+<form asp-action="Index" method="get">
+    <div class="form-actions no-color">
+        <p>
+            Find by name:
+            <input type="text" name="currentFilter" value="@ViewBag.CurrentFilter" />
+            <input type="submit" value="Search" class="btn btn-primary" /> |
+            <a asp-action="Index">Back to Full List</a>
+        </p>
+    </div>
+</form>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.First_name)
+            </th>
+            <th>
+                <a class="nav-link text-info-emphasis" asp-controller="Customers" asp-action="Index" asp-route-sort="0" asp-route-asc="@(!ViewBag.Asc)" asp-route-currentFilter="@ViewBag.CurrentFilter">Last_name</a>
+            </th>
+            <th>
+                <a class="nav-link text-info-emphasis" asp-controller="Customers" asp-action="Index" asp-route-sort="1" asp-route-asc="@(!ViewBag.Asc)" asp-route-currentFilter="@ViewBag.CurrentFilter">Address</a>
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Discount)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in sortedList) {
+        <tr>
+            <td>
+                @Html.DisplayFor(model => item.First_name)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.Last_name)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.Address)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.Discount)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

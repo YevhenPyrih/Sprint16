@@ -1,0 +1,69 @@
+@model Sprint16.Models.Order
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Order @Model.Id</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Customer)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Supermarket)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Order_date)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+            <tr>
+                <td>
+                    @Model.Customer
+                </td>
+                <td>
+                    @Model.Supermarket
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.Order_date)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+                    <a asp-action="Index">Back to List</a>
+                </td>
+            </tr>
+    </tbody>
+</table>
+
+<h2>Order Details</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Product
+            </th>
+            <th>
+                Quantity
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var item in ViewBag.Details)
+        {
+            <tr>
+                <td>
+                    @item.Product
+                </td>
+                <td>
+                    @item.Quantity
+                </td>
+            </tr>    
+        }
+    </tbody>
+</table>
